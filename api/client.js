@@ -1,7 +1,7 @@
 import { create } from 'apisauce';
 
 const apiClient = create({
-    baseURL: 'https://api.meet2coffee.com',
+    baseURL: 'https://test-api.meet2coffee.com',
 });
 
 const get = apiClient.get;
