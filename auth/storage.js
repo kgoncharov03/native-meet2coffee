@@ -23,7 +23,7 @@ const removeToken = async () => {
     try {
         await SecureStore.deleteItemAsync(key);
     } catch (error) {
-        console.log('Error removing the token', eerror);
+        console.log('Error removing the token', error);
     }
 };
 
