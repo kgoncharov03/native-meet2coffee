@@ -7,6 +7,12 @@ const login = (email, password) => {
     return apiClient.post(endpoint, { email, password });
 };
 
+
+const check_token = (token) => {
+    apiClient.setHeaders({ 'Skip-Cookie-Authorization': 'yes', 'Authorization': token});
+    return apiClient.post("/User/");
+};
+
 export default {
-    login,
+    login,check_token
 };

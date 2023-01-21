@@ -34,7 +34,6 @@ export default function LoginScreen() {
 
         authStorage.storeToken(result.data['token']);
 
-        console.log('LOGIN SELF TOKEN', result.data['token']);
         setLoginFailed(false);
     };
 
