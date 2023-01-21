@@ -8,19 +8,21 @@ import authStorage from './auth/storage';
 
 import apiClient from './api/client';
 
+import authApi from './api/auth';
+
 function App() {
-    const [user, setUser] = useState(true);
+    const [user, setUser] = useState(false);
 
     const restoreToken = async () => {
         const token = await authStorage.getToken();
         if (!token) return;
 
-        const result = await apiClient.get('/User', {}, {});
+        const tokenValidity = await authApi.checkToken(token);
 
-        console.log(result);
-        console.log('RESTORED TOKEN', token);
-
-        if (!result.ok) return;
+        if (!tokenValidity.ok) {
+            await authStorage.removeToken();
+            return;
+        }
 
         setUser(token);
     };
