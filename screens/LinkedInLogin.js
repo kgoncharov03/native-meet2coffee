@@ -10,10 +10,15 @@ import { ActivityIndicator } from 'react-native';
 import apiClient from '../api/client';
 import AuthContext from '../auth/context';
 
+import { useNavigation } from '@react-navigation/native';
+
 const REDIRECT_URI = 'https://meet2coffee.com/linkedin-signin'; // this needs to be the same as your linkedin app panel
 const AUTH_ENDPOINT = `https://www.linkedin.com/oauth/v2/authorization?client_id=773ov8eihsewkg&redirect_uri=${REDIRECT_URI}&response_type=code&scope=r_liteprofile%20r_emailaddress`;
 
 export default function LinkedinLogin() {
+
+    const navigation = useNavigation();
+
     const [token, setToken] = useState(false);
     //const [loginFailed, setLoginFailed] = useState(false);
 
@@ -30,10 +35,27 @@ export default function LinkedinLogin() {
 
         authStorage.storeToken(result.data['token']);
 
-        setLoginFailed(false);
     };
 
+ 
+    const handleFail = () => navigation.navigate('LoginScreen');
+
+
+
     loadStart = ({ url }) => {
+       // console.log(url)
+
+
+        if(url == "https://meet2coffee.com/linkedin-signin?error=user_cancelled_login&error_description=The+user+cancelled+LinkedIn+login") {
+            
+        handleFail();
+        }
+
+        if(url == "https://meet2coffee.com/") {
+            
+        handleFail();
+        }
+
         if (!url) {
             return;
         }
