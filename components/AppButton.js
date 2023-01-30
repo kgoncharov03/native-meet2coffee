@@ -6,7 +6,7 @@ import colors from '../config/colors';
 function AppButton({ title, color = 'primary', ...otherProps }) {
     return (
         <TouchableOpacity
-            style={[styles.AppButton, { backgroundColor: '#fff' }]}
+            style={[styles.AppButton, { backgroundColor: '#467BEA' }]}
             {...otherProps}
         >
             <Text style={styles.text}>{title}</Text>
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 
     text: {
         fontSize: 18,
-        color: '#000',
+        color: '#fff',
         textTransform: 'uppercase',
     },
 });

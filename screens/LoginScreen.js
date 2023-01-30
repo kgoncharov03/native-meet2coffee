@@ -1,7 +1,5 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
 import React, { useContext, useState } from 'react';
-import Screen from '../components/Screen';
-import AppTextInput from '../components/AppTextInput';
 import AppButton from '../components/AppButton';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -39,8 +37,11 @@ export default function LoginScreen() {
     };
 
     return (
-        <Screen style={styles.container}>
+        <View style={styles.container}>
+
             {loginFailed && <Text>Wrong Email or Password</Text>}
+
+             <Image style={styles.logo} source={require("../assets/data/m2c_logo.png")}/>
 
             <Formik
                 initialValues={{ email: '', password: '' }}
@@ -78,19 +79,22 @@ export default function LoginScreen() {
                 title={'Login with LinkedIn'}
                 onPress={() => navigation.navigate('LinkedInLogin')}
             />
-        </Screen>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
+        paddingTop: 250,
+        padding: 20,
+        backgroundColor:"#fff",
+        flex:1
     },
     logo: {
-        width: 80,
-        height: 80,
+        width: 200,
+        height: 100,
         alignSelf: 'center',
-        marginTop: 50,
-        marginBottom: 20,
+   
+        marginBottom: 30,
     },
 });
