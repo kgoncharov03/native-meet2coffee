@@ -38,10 +38,10 @@ export default function LoginScreen() {
 
     return (
         <View style={styles.container}>
-
-            
-
-             <Image style={styles.logo} source={require("../assets/data/m2c_logo.png")}/>
+            <Image
+                style={styles.logo}
+                source={require('../assets/data/m2c_logo.png')}
+            />
 
             <Formik
                 initialValues={{ email: '', password: '' }}
@@ -89,14 +89,14 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: 125,
         padding: 20,
-        backgroundColor:"#fff",
-        flex:1
+        backgroundColor: '#fff',
+        flex: 1,
     },
     logo: {
         width: 200,
         height: 100,
         alignSelf: 'center',
-   
+
         marginBottom: 30,
     },
 });
