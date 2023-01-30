@@ -39,7 +39,7 @@ export default function LoginScreen() {
     return (
         <View style={styles.container}>
 
-            {loginFailed && <Text>Wrong Email or Password</Text>}
+            
 
              <Image style={styles.logo} source={require("../assets/data/m2c_logo.png")}/>
 
@@ -66,9 +66,11 @@ export default function LoginScreen() {
                             icon='lock'
                             placeholder='Password'
                             textContentType='password'
-                            secureTextEntry={false}
+                            secureTextEntry={true}
                             name='password'
                         />
+
+                        {loginFailed && <Text>Wrong Email or Password</Text>}
 
                         <SubmitButton title1='login' />
                     </>
@@ -85,7 +87,7 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 250,
+        paddingTop: 125,
         padding: 20,
         backgroundColor:"#fff",
         flex:1
