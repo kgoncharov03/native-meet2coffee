@@ -8,12 +8,12 @@ import * as Yup from 'yup';
 import AppFormField from '../components/AppFormField';
 import SubmitButton from '../components/SubmitButton';
 import authApi from '../api/auth';
-import jwtDecode from 'jwt-decode';
 import MD5 from 'crypto-js/md5';
 
 import AuthContext from '../auth/context';
 import authStorage from '../auth/storage';
-import apiClient from '../api/client';
+
+import { useNavigation } from '@react-navigation/native';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().required().email().label('Email'),
@@ -22,6 +22,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function LoginScreen() {
+    const navigation = useNavigation();
     const [loginFailed, setLoginFailed] = useState(false);
     const authContext = useContext(AuthContext);
 
@@ -72,6 +73,11 @@ export default function LoginScreen() {
                     </>
                 )}
             </Formik>
+
+            <AppButton
+                title={'Login with LinkedIn'}
+                onPress={() => navigation.navigate('LinkedInLogin')}
+            />
         </Screen>
     );
 }

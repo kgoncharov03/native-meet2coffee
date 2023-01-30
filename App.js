@@ -10,7 +10,6 @@ import apiClient from './api/client';
 
 import authApi from './api/auth';
 
-
 import LinkedinLogin from './screens/LinkedInLogin';
 
 import AuthContextRoute from './auth/AuthContextRoute';
@@ -18,32 +17,23 @@ import AuthContextRoute from './auth/AuthContextRoute';
 import ActivityIndicatorScreen from './screens/ActivityIndicatorScreen';
 
 function App() {
-
-
     const [user, setUser] = useState(false);
     const [loadingToken, isLoadingToken] = useState(true);
 
-
     const restoreToken = async () => {
-        
-        isLoadingToken(true)
+        isLoadingToken(true);
 
         const token = await authStorage.getToken();
-     
-       
+
         if (!token) {
-
             isLoadingToken(false);
-            
-            return;
 
+            return;
         }
 
         const tokenValidity = await authApi.checkToken(token);
 
-
         if (!tokenValidity.ok) {
-          
             await authStorage.removeToken();
             isLoadingToken(false);
             return;
@@ -51,7 +41,6 @@ function App() {
 
         isLoadingToken(false);
         setUser(token);
-       
     };
 
     useEffect(() => {
@@ -59,14 +48,13 @@ function App() {
     }, []);
 
     return (
-
-      <>
-
-      {loadingToken ? <ActivityIndicatorScreen/> : <AuthContextRoute user={user} setUser={setUser}/> }
-
-      </>
-
-
+        <>
+            {loadingToken ? (
+                <ActivityIndicatorScreen />
+            ) : (
+                <AuthContextRoute user={user} setUser={setUser} />
+            )}
+        </>
     );
 }
 
