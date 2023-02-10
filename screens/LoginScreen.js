@@ -1,19 +1,17 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
 import React, { useContext, useState } from 'react';
-import Screen from '../components/Screen';
-import AppTextInput from '../components/AppTextInput';
 import AppButton from '../components/AppButton';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import AppFormField from '../components/AppFormField';
 import SubmitButton from '../components/SubmitButton';
 import authApi from '../api/auth';
-import jwtDecode from 'jwt-decode';
 import MD5 from 'crypto-js/md5';
 
 import AuthContext from '../auth/context';
 import authStorage from '../auth/storage';
-import apiClient from '../api/client';
+
+import { useNavigation } from '@react-navigation/native';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().required().email().label('Email'),
@@ -22,6 +20,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function LoginScreen() {
+    const navigation = useNavigation();
     const [loginFailed, setLoginFailed] = useState(false);
     const authContext = useContext(AuthContext);
 
@@ -38,8 +37,11 @@ export default function LoginScreen() {
     };
 
     return (
-        <Screen style={styles.container}>
-            {loginFailed && <Text>Wrong Email or Password</Text>}
+        <View style={styles.container}>
+            <Image
+                style={styles.logo}
+                source={require('../assets/data/m2c_logo.png')}
+            />
 
             <Formik
                 initialValues={{ email: '', password: '' }}
@@ -64,27 +66,37 @@ export default function LoginScreen() {
                             icon='lock'
                             placeholder='Password'
                             textContentType='password'
-                            secureTextEntry={false}
+                            secureTextEntry={true}
                             name='password'
                         />
+
+                        {loginFailed && <Text>Wrong Email or Password</Text>}
 
                         <SubmitButton title1='login' />
                     </>
                 )}
             </Formik>
-        </Screen>
+
+            <AppButton
+                title={'Login with LinkedIn'}
+                onPress={() => navigation.navigate('LinkedInLogin')}
+            />
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
+        paddingTop: 125,
+        padding: 20,
+        backgroundColor: '#fff',
+        flex: 1,
     },
     logo: {
-        width: 80,
-        height: 80,
+        width: 200,
+        height: 100,
         alignSelf: 'center',
-        marginTop: 50,
-        marginBottom: 20,
+
+        marginBottom: 30,
     },
 });

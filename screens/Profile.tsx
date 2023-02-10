@@ -10,7 +10,23 @@ import { Icon, ProfileItem } from '../components';
 import DEMO from '../assets/data/demo';
 import styles, { WHITE } from '../assets/styles';
 
+import { useContext } from 'react';
+import authStorage from '../auth/storage';
+import AuthContext from '../auth/context';
+import apiClient from '../api/client';
+
 const Profile = () => {
+    const { user, setUser } = useContext(AuthContext);
+
+    const handleLogOut = async () => {
+        setUser(null);
+        authStorage.removeToken();
+
+        const LogOut = await apiClient.post('/Logout/');
+
+        console.log(LogOut);
+    };
+
     const { age, image, info1, info2, info3, info4, location, match, name } =
         DEMO[7];
 
@@ -62,9 +78,11 @@ const Profile = () => {
                         />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.roundedButton}>
-                        <Icon name='chatbubble' size={20} color={WHITE} />
-                        <Text style={styles.textButton}>Start chatting</Text>
+                    <TouchableOpacity
+                        style={styles.roundedButton}
+                        onPress={handleLogOut}
+                    >
+                        <Text style={styles.textButton}>Log Out</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
