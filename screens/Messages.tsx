@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     ScrollView,
     Text,
@@ -12,25 +12,31 @@ import DEMO from '../assets/data/demo';
 import styles, { DARK_GRAY } from '../assets/styles';
 import { ActivityIndicator } from 'react-native';
 import { ChatWindow } from './ChatWindow';
-import apiClient from '../api/client';
+import { apiClient } from '../api/client';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+// import AuthContext from '../auth/context';
+import { ChatItem } from '../api/typings';
 
 const Stack = createStackNavigator();
 
 const Messages = () => {
-    const [chatData, setChatData] = useState({ chats: [], loading: true });
+    const [chatData, setChatData] = useState<{
+        chats: ChatItem[];
+        loading: boolean;
+    }>({ chats: [], loading: true });
+    // const { api } = useContext(AuthContext)!;
+
     useEffect(() => {
-        apiClient
-            .get('/Chats/', { imgSize: 'SMALL', skip: 0, limit: 1000 }, {})
-            .then((res) => {
-                console.log(res.data.chats.length);
-                setChatData({ chats: res.data.chats, loading: false });
-            });
+        // api.chats({}).then(({ chats }) => {
+        //     console.log('!!! chats:', chats);
+        //     setChatData({ chats, loading: false });
+        // });
     }, []);
+
     return (
         <ImageBackground
-            source={require('../assets/images/bg.png')}
+            // source={require('../assets/images/bg.png')}
             style={styles.bg}
         >
             <Stack.Navigator>

@@ -1,10 +1,10 @@
-import LoginScreen from '../screens/LoginScreen';
 import React from 'react';
-import LinkedInLogin from '../screens/LinkedInLogin';
+import { LoginScreen } from '../auth/LoginScreen';
+import { LinkedinLogin } from '../auth/LinkedInLogin';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-export default function AuthNavigator() {
+export const AuthNavigator = () => {
     const Stack = createStackNavigator();
 
     const AuthNavigator = () => (
@@ -16,8 +16,8 @@ export default function AuthNavigator() {
             />
 
             <Stack.Screen
-                name='LinkedInLogin'
-                component={LinkedInLogin}
+                name='LinkedinLogin'
+                component={LinkedinLogin}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>
@@ -28,4 +28,4 @@ export default function AuthNavigator() {
             <AuthNavigator />
         </NavigationContainer>
     );
-}
+};

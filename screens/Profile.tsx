@@ -11,16 +11,16 @@ import DEMO from '../assets/data/demo';
 import styles, { WHITE } from '../assets/styles';
 
 import { useContext } from 'react';
-import authStorage from '../auth/storage';
-import AuthContext from '../auth/context';
-import apiClient from '../api/client';
+// import authStorage from '../auth/storage';
+// import AuthContext from '../auth/context';
+import { apiClient } from '../api/client';
 
 const Profile = () => {
-    const { user, setUser } = useContext(AuthContext);
+    // const { user, setUser } = useContext(AuthContext);
 
     const handleLogOut = async () => {
-        setUser(null);
-        authStorage.removeToken();
+        // setUser(null);
+        // authStorage.removeToken();
 
         const LogOut = await apiClient.post('/Logout/');
 
@@ -32,7 +32,7 @@ const Profile = () => {
 
     return (
         <ImageBackground
-            source={require('../assets/images/bg.png')}
+            // source={require('../assets/images/bg.png')}
             style={styles.bg}
         >
             <ScrollView style={styles.containerProfile}>

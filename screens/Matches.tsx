@@ -13,7 +13,7 @@ import styles, { DARK_GRAY } from '../assets/styles';
 
 const Matches = () => (
     <ImageBackground
-        source={require('../assets/images/bg.png')}
+        // source={require('../assets/images/bg.png')}
         style={styles.bg}
     >
         <View style={styles.containerMatches}>
