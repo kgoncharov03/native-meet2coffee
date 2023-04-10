@@ -5,13 +5,17 @@ import { tokenSelector } from '../redux/selectors/token';
 import { setUserMiddleware } from './middlewares/setUser';
 import { setLoggedIn } from '../redux/actions';
 import { setTokenMiddlware } from './middlewares/setToken';
-import { setUnauthorizedMiddleware } from './middlewares/setUnauthorized';
+import {
+    setLoggedOutMiddleware,
+    setUnauthorizedMiddleware,
+} from './middlewares/setUnauthorized';
 
 enum Endpoint {
     User = '/User/',
     Chats = '/Chats/',
     Login = '/Login/',
     LoginWithEmail = '/LoginWithEmail/',
+    Logout = '/Logout/',
 }
 
 const apiClient = create({
@@ -46,9 +50,12 @@ const post = async ({
             },
         });
 
+        console.log('!!! response:', response);
+
         const { data } = response;
 
         if (!response.ok) {
+            console.log('!!! response:', response.status);
             throw new ApiCallError({
                 message: (data as any).message || 'Somethinig went wrong.',
                 code: response.status,
@@ -77,6 +84,14 @@ export class Api {
             withAuth: true,
         });
         return data;
+    }
+
+    static async logout(): Promise<void> {
+        await post({
+            endpoint: Endpoint.Logout,
+            successMiddlewares: [setLoggedOutMiddleware],
+            withAuth: true,
+        });
     }
 
     static async chats({

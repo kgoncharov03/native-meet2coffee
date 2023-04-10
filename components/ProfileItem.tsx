@@ -23,9 +23,7 @@ const ProfileItem = ({
 
         <Text style={styles.name}>{name}</Text>
 
-        <Text style={styles.descriptionProfileItem}>
-            {age} - {location}
-        </Text>
+        <Text style={styles.descriptionProfileItem}>{location}</Text>
 
         <View style={styles.info}>
             <Text style={styles.iconProfile}>
@@ -36,12 +34,12 @@ const ProfileItem = ({
 
         <View style={styles.info}>
             <Text style={styles.iconProfile}>
-                <Icon name='pizza' size={12} color={DARK_GRAY} />
+                <Icon name='calendar' size={12} color={DARK_GRAY} />
             </Text>
             <Text style={styles.infoContent}>{info2}</Text>
         </View>
 
-        <View style={styles.info}>
+        {/* <View style={styles.info}>
             <Text style={styles.iconProfile}>
                 <Icon name='airplane' size={12} color={DARK_GRAY} />
             </Text>
@@ -53,7 +51,7 @@ const ProfileItem = ({
                 <Icon name='calendar' size={12} color={DARK_GRAY} />
             </Text>
             <Text style={styles.infoContent}>{info4}</Text>
-        </View>
+        </View> */}
     </View>
 );
 

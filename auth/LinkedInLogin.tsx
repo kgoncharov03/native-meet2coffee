@@ -11,10 +11,8 @@ export const LinkedinLogin = () => {
     const [logging, setLogging] = useState<boolean>(false);
     const loginWithLinkedin = async (token: string) => {
         try {
-            const data = await Api.loginWithLinkedin({ code: token });
-            console.log(data);
+            await Api.loginWithLinkedin({ code: token });
         } catch (err) {
-            console.log(err);
             // TODO: redirect with error to LoginScreen
         }
     };
@@ -26,7 +24,6 @@ export const LinkedinLogin = () => {
                 redirectUri={REDIRECT_URI_TEST}
                 shouldGetAccessToken={false}
                 onSuccess={(result) => {
-                    console.log('!!! result:', result);
                     const { authentication_code: token } = result;
                     if (!token) {
                         return;

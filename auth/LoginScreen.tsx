@@ -37,7 +37,6 @@ export const LoginScreen = () => {
         } catch (err) {
             let errorMessage = '';
             if (err instanceof ApiCallError) {
-                console.log(err.code, err.message);
                 errorMessage = err.message;
             }
             setLoginFailedMessage(errorMessage || 'Something went wrong');

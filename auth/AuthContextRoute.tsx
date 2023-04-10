@@ -6,6 +6,5 @@ import { AppNavigator } from '../navigation/AppNavigator';
 
 export const AuthContextRoute = () => {
     const loggedIn = useSelector((state: RootState) => state.loggedIn);
-    console.log(loggedIn);
     return <>{loggedIn ? <AppNavigator /> : <AuthNavigator />}</>;
 };

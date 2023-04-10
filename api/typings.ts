@@ -14,6 +14,7 @@ export type User = {
         seeWhoLikesYou: SWLYValue;
     };
     spec: {
+        name: string;
         avatar?: string;
         bio?: string;
         displayedCompany?: string;
