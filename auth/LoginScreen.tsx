@@ -1,17 +1,16 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import AppButton from '../components/AppButton';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import AppFormField from '../components/AppFormField';
-import SubmitButton from '../components/SubmitButton';
-import authApi from '../api/auth';
+import { SubmitButton } from '../components/SubmitButton';
+// @ts-ignore
 import MD5 from 'crypto-js/md5';
 
-import AuthContext from '../auth/context';
-import authStorage from '../auth/storage';
-
 import { useNavigation } from '@react-navigation/native';
+import { Api } from '../api';
+import { ApiCallError } from '../api/typings';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().required().email().label('Email'),
@@ -19,21 +18,32 @@ const validationSchema = Yup.object().shape({
     password: Yup.string().required().min(4).label('Password'),
 });
 
-export default function LoginScreen() {
+export const LoginScreen = () => {
     const navigation = useNavigation();
-    const [loginFailed, setLoginFailed] = useState(false);
-    const authContext = useContext(AuthContext);
+    const [loginFailedMessage, setLoginFailedMessage] = useState<string>('');
 
-    const handleSubmit = async ({ email, password }) => {
-        const result = await authApi.login(email, MD5(password).toString());
+    const handleSubmit = async ({
+        email,
+        password,
+    }: {
+        email: string;
+        password: string;
+    }) => {
+        try {
+            await Api.loginWithEmail({
+                email,
+                password: MD5(password).toString(),
+            });
+        } catch (err) {
+            let errorMessage = '';
+            if (err instanceof ApiCallError) {
+                errorMessage = err.message;
+            }
+            setLoginFailedMessage(errorMessage || 'Something went wrong');
+            return;
+        }
 
-        if (!result.ok) return setLoginFailed(true);
-
-        authContext.setUser(result.data['token']);
-
-        authStorage.storeToken(result.data['token']);
-
-        setLoginFailed(false);
+        setLoginFailedMessage('');
     };
 
     return (
@@ -70,20 +80,22 @@ export default function LoginScreen() {
                             name='password'
                         />
 
-                        {loginFailed && <Text>Wrong Email or Password</Text>}
+                        {loginFailedMessage && (
+                            <Text>{loginFailedMessage}</Text>
+                        )}
 
-                        <SubmitButton title1='login' />
+                        <SubmitButton title='login' />
                     </>
                 )}
             </Formik>
-
             <AppButton
                 title={'Login with LinkedIn'}
-                onPress={() => navigation.navigate('LinkedInLogin')}
+                onPress={() => navigation.navigate('LinkedinLogin')}
             />
+            {}
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -96,7 +108,6 @@ const styles = StyleSheet.create({
         width: 200,
         height: 100,
         alignSelf: 'center',
-
         marginBottom: 30,
     },
 });

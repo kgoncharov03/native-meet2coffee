@@ -11,24 +11,20 @@ import DEMO from '../assets/data/demo';
 import styles, { WHITE } from '../assets/styles';
 
 import { useContext } from 'react';
-import authStorage from '../auth/storage';
-import AuthContext from '../auth/context';
-import apiClient from '../api/client';
+import { apiClient } from '../api/client';
+import { useSelector } from 'react-redux';
+import { User } from '../api/typings';
+import { RootState } from '../redux/reducers';
+import { Api } from '../api';
 
 const Profile = () => {
-    const { user, setUser } = useContext(AuthContext);
-
+    const user = useSelector((state: RootState) => state.user);
     const handleLogOut = async () => {
-        setUser(null);
-        authStorage.removeToken();
-
-        const LogOut = await apiClient.post('/Logout/');
-
-        console.log(LogOut);
+        await Api.logout();
     };
 
-    const { age, image, info1, info2, info3, info4, location, match, name } =
-        DEMO[7];
+    const { name, avatar, headline, bio, displayedCompany, manualGeo } =
+        user!.spec;
 
     return (
         <ImageBackground
@@ -36,7 +32,7 @@ const Profile = () => {
             style={styles.bg}
         >
             <ScrollView style={styles.containerProfile}>
-                <ImageBackground source={image} style={styles.photo}>
+                <ImageBackground source={{ uri: avatar }} style={styles.photo}>
                     <View style={styles.top}>
                         <TouchableOpacity>
                             <Icon
@@ -59,14 +55,11 @@ const Profile = () => {
                 </ImageBackground>
 
                 <ProfileItem
-                    matches={match}
+                    matches={'80'}
                     name={name}
-                    age={age}
-                    location={location}
-                    info1={info1}
-                    info2={info2}
-                    info3={info3}
-                    info4={info4}
+                    location={manualGeo}
+                    info1={headline}
+                    info2={bio}
                 />
 
                 <View style={styles.actionsProfile}>
