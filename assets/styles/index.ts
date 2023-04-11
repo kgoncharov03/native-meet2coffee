@@ -247,7 +247,6 @@ export default StyleSheet.create({
     containerMessages: {
         justifyContent: 'space-between',
         flex: 1,
-        // paddingHorizontal: 10,
     },
 
     // CONTAINER - PROFILE

@@ -16,6 +16,8 @@ enum Endpoint {
     Login = '/Login/',
     LoginWithEmail = '/LoginWithEmail/',
     Logout = '/Logout/',
+    Messages = '/Messages/',
+    GetUser = '/GetUser/',
 }
 
 const apiClient = create({
@@ -50,12 +52,9 @@ const post = async ({
             },
         });
 
-        console.log('!!! response:', response);
-
         const { data } = response;
 
         if (!response.ok) {
-            console.log('!!! response:', response.status);
             throw new ApiCallError({
                 message: (data as any).message || 'Somethinig went wrong.',
                 code: response.status,
@@ -77,13 +76,12 @@ const post = async ({
 
 export class Api {
     static async user(): Promise<User> {
-        const data = await post({
+        return post({
             endpoint: Endpoint.User,
             successMiddlewares: [setUserMiddleware],
             errorMiddewares: [setUnauthorizedMiddleware],
             withAuth: true,
         });
-        return data;
     }
 
     static async logout(): Promise<void> {
@@ -99,7 +97,7 @@ export class Api {
         skip = 0,
         limit = 100,
     }): Promise<ChatResponse> {
-        const response = await post({
+        return post({
             endpoint: Endpoint.Chats,
             body: {
                 imgSize,
@@ -109,7 +107,27 @@ export class Api {
             errorMiddewares: [setUnauthorizedMiddleware],
             withAuth: true,
         });
-        return response.data;
+    }
+
+    static async messages({
+        chatId,
+        limit = 100,
+        skip = 0,
+    }: {
+        chatId: string;
+        limit?: number;
+        skip?: number;
+    }): Promise<any> {
+        return post({
+            endpoint: Endpoint.Messages,
+            body: {
+                chatId,
+                limit,
+                skip,
+            },
+            errorMiddewares: [setUnauthorizedMiddleware],
+            withAuth: true,
+        });
     }
 
     static loginWithLinkedin = ({
@@ -154,6 +172,27 @@ export class Api {
                 setTokenMiddlware,
             ],
             withAuth: false,
+        });
+    };
+
+    static getUser = ({
+        id,
+        imageSize = 'MEDIUM',
+        m2c = false,
+    }: {
+        id: string;
+        imageSize?: string;
+        m2c?: boolean;
+    }) => {
+        return post({
+            endpoint: Endpoint.GetUser,
+            body: {
+                userId: id,
+                imageSize,
+                m2c,
+            },
+            errorMiddewares: [setUnauthorizedMiddleware],
+            withAuth: true,
         });
     };
 }

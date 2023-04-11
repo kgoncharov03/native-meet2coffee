@@ -4,7 +4,6 @@ import { User } from '../typings';
 
 export const setUserMiddleware = (data: { user: User }) => {
     const { user } = data;
-    console.log('!!! user:', user);
     if (!user) {
         return;
     }

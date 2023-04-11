@@ -43,6 +43,7 @@ export type ChatItem = {
     name: string;
     pinned: number;
     unread: boolean;
+    avatar: string;
     lastMessagePreview: {
         ctime: string;
         text: string;
