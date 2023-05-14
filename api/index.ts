@@ -51,6 +51,7 @@ const post = async ({
 }: RequestOptions): Promise<any> => {
     const token = tokenSelector(store.getState());
     try {
+        console.log('!!! body:', body);
         const response = await apiClient.post(endpoint, body, {
             headers: {
                 ...baseHeaders,
@@ -60,7 +61,10 @@ const post = async ({
 
         const { data } = response;
 
+        console.log('!!! data:', data);
+
         if (!response.ok) {
+            console.log('!!! response:', response);
             throw new ApiCallError({
                 message: (data as any).message || 'Somethinig went wrong.',
                 code: response.status,
@@ -171,11 +175,11 @@ export class Api {
                 password,
             },
             successMiddlewares: [
+                setTokenMiddlware,
+                setUserMiddleware,
                 () => {
                     store.dispatch(setLoggedIn(true));
                 },
-                setUserMiddleware,
-                setTokenMiddlware,
             ],
             withAuth: false,
         });
