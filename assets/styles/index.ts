@@ -234,6 +234,9 @@ export default StyleSheet.create({
     // CONTAINER - HOME
     containerHome: {
         marginHorizontal: 10,
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
     },
 
     // CONTAINER - MATCHES

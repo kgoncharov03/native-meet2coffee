@@ -13,6 +13,8 @@ import styles, {
 const CardItem = ({
     description,
     hasActions,
+    onLike,
+    onDislike,
     hasVariant,
     image,
     isOnline,
@@ -40,10 +42,11 @@ const CardItem = ({
         },
     ];
 
+    console.log('!!! image:', image);
     return (
         <View style={styles.containerCardItem}>
             {/* IMAGE */}
-            <Image source={image} style={imageStyle} />
+            <Image source={{ uri: image }} style={imageStyle} />
 
             {/* MATCHES */}
             {matches && (
@@ -80,11 +83,11 @@ const CardItem = ({
                         <Icon name='star' color={STAR_ACTIONS} size={14} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={onLike}>
                         <Icon name='heart' color={LIKE_ACTIONS} size={25} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={onDislike}>
                         <Icon name='close' color={DISLIKE_ACTIONS} size={25} />
                     </TouchableOpacity>
 

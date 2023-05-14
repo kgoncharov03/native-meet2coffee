@@ -12,6 +12,7 @@ const initialState = {
     user: undefined,
     token: undefined,
     loggedIn: false,
+    socket: null,
 };
 
 const rootReducer = (state: RootState = initialState, action: AnyAction) => {

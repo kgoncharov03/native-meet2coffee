@@ -8,6 +8,9 @@ import { Api } from '../../api';
 import { processMessages } from './utils/processMessages';
 import { RouteProp } from '@react-navigation/native';
 import { RootState } from '../../redux/reducers';
+import { eventEmitter } from '../../event';
+import { Event } from '../../event/typings';
+import { unique } from '../../utils/unique';
 
 export const MessageList = ({
     route,
@@ -15,6 +18,7 @@ export const MessageList = ({
     route: RouteProp<{ params: { id: string } }, 'params'>;
 }) => {
     const { id } = route.params;
+    const [user, setUser] = useState<any>();
     const [messagesData, setMessagesData] = useState({
         loading: true,
         messages: [],
@@ -44,21 +48,50 @@ export const MessageList = ({
             avatar: spec.avatar,
             name: spec.name,
         };
+        setUser(user);
         setMessagesData({
             loading: false,
             messages: processMessages({ messages, self, user }) as any,
         });
+        return user;
+    };
+
+    const initMessages = async () => {
+        const user = await fetchMessages();
+        eventEmitter.on(Event.NEW_MESSAGE, (message) => {
+            setMessagesData((data) => ({
+                ...data,
+                messages: GiftedChat.append(
+                    data.messages,
+                    processMessages({
+                        messages: [
+                            {
+                                ...message,
+                                fromId: message.user_id,
+                                ctime: new Date(message.ctime),
+                            },
+                        ],
+                        self,
+                        user,
+                    }) as any
+                ),
+            }));
+        });
     };
 
     useEffect(() => {
-        fetchMessages();
+        initMessages();
     }, []);
 
-    const onSend = useCallback((messages = []) => {
+    const onSend = useCallback((messages: any[] = []) => {
         setMessagesData((data) => ({
             ...data,
-            messages: GiftedChat.append(data.messages, messages),
+            messages: GiftedChat.append(data.messages, messages as never),
         }));
+        Api.sendMessage({
+            chatId: id,
+            text: messages[0].text,
+        });
     }, []);
     const { loading, messages } = messagesData;
 
@@ -88,9 +121,10 @@ export const MessageList = ({
             ) : (
                 <View style={styles.containerMessages}>
                     <GiftedChat
-                        messages={messages}
+                        messages={unique(messages, '_id')}
                         onSend={onSend}
                         user={self}
+                        showUserAvatar
                         bottomOffset={0}
                         wrapInSafeArea={false}
                     />

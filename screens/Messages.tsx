@@ -1,17 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import {
-    Text,
-    TouchableOpacity,
-    ImageBackground,
-    View,
-    FlatList,
-} from 'react-native';
-import { Icon, Message } from '../components';
-import styles, { DARK_GRAY } from '../assets/styles';
+import React from 'react';
+import { ImageBackground } from 'react-native';
+import styles from '../assets/styles';
 import { createStackNavigator } from '@react-navigation/stack';
-// import AuthContext from '../auth/context';
-import { ChatItem } from '../api/typings';
-import { Api } from '../api';
 import { MessageList } from '../components/chats/MessageList';
 import { ChatList } from '../components/chats/ChatList';
 
