@@ -9,6 +9,7 @@ import {
     setLoggedOutMiddleware,
     setUnauthorizedMiddleware,
 } from './middlewares/setUnauthorized';
+import { Reaction } from '../typings/swipes';
 
 enum Endpoint {
     User = '/User/',
@@ -18,6 +19,11 @@ enum Endpoint {
     Logout = '/Logout/',
     Messages = '/Messages/',
     GetUser = '/GetUser/',
+    GetSocket = '/GetSocket/',
+    Matches = '/Matches/',
+    Swipe = '/Swipe/',
+    SendMessage = '/SendMessage/',
+    Connections = '/Connections/',
 }
 
 const apiClient = create({
@@ -190,6 +196,69 @@ export class Api {
                 userId: id,
                 imageSize,
                 m2c,
+            },
+            errorMiddewares: [setUnauthorizedMiddleware],
+            withAuth: true,
+        });
+    };
+
+    static getSocket = () => {
+        return post({
+            endpoint: Endpoint.GetSocket,
+            errorMiddewares: [setUnauthorizedMiddleware],
+            withAuth: true,
+        });
+    };
+
+    static matches = ({ imageSize = 'LARGE' }) => {
+        return post({
+            endpoint: Endpoint.Matches,
+            errorMiddewares: [setUnauthorizedMiddleware],
+            body: {
+                imageSize,
+            },
+            withAuth: true,
+        });
+    };
+
+    static swipe = ({ id, reaction }: { id: string; reaction: Reaction }) => {
+        return post({
+            endpoint: Endpoint.Swipe,
+            errorMiddewares: [setUnauthorizedMiddleware],
+            body: {
+                user_id: id,
+                reaction,
+            },
+            withAuth: true,
+        });
+    };
+
+    static sendMessage = ({
+        chatId,
+        text,
+        m2c = false,
+    }: {
+        chatId: string;
+        text: string;
+        m2c?: boolean;
+    }) => {
+        return post({
+            endpoint: Endpoint.SendMessage,
+            body: {
+                chatId,
+                text,
+                m2c,
+            },
+            errorMiddewares: [setUnauthorizedMiddleware],
+            withAuth: true,
+        });
+    };
+
+    static connections = ({ imageSize = 'MEDIUM' }) => {
+        return post({
+            endpoint: Endpoint.Connections,
+            body: {
+                imageSize,
             },
             errorMiddewares: [setUnauthorizedMiddleware],
             withAuth: true,

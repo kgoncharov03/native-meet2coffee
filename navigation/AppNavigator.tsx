@@ -1,15 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home, Matches, Messages, Profile } from '../screens';
 import { PRIMARY_COLOR, DARK_GRAY, BLACK, WHITE } from '../assets/styles';
 import TabBarIcon from '../components/TabBarIcon';
+import { RootState } from '../redux/reducers';
+import { useSelector } from 'react-redux';
+import { Api } from '../api';
+import { Socket, io } from 'socket.io-client';
+import { subscribeSocketMessages } from '../utils/subscribeSocketMessages';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => {
+    const [socket, setSocket] = useState<Socket | null>(null);
+    const token = useSelector((state: RootState) => state.token);
+    const fetchSocket = async () => {
+        if (socket && socket.connected) {
+            return;
+        }
+        const { address: socketUrl } = await Api.getSocket();
+        console.log('!!!', socketUrl + '?token=' + token);
+        const connectedSocket = io(socketUrl + '?token=' + token);
+        connectedSocket.on('connect', () => console.log('connected'));
+        connectedSocket.on('disconnect', () => console.log('DISCONNECTED'));
+        setSocket(connectedSocket);
+        subscribeSocketMessages(connectedSocket);
+    };
+
+    useEffect(() => {
+        fetchSocket();
+        return () => {
+            if (!socket) {
+                return;
+            }
+            socket.close();
+        };
+    }, []);
+
     return (
         <NavigationContainer>
             <Stack.Navigator>

@@ -6,6 +6,8 @@ export type CardItemT = {
     isOnline?: boolean;
     matches?: string;
     name: string;
+    onLike: () => void;
+    onDislike: () => void;
 };
 
 export type IconT = {
