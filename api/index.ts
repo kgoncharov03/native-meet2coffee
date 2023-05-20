@@ -24,6 +24,7 @@ enum Endpoint {
     Swipe = '/Swipe/',
     SendMessage = '/SendMessage/',
     Connections = '/Connections/',
+    Reset = '/Reset/',
 }
 
 const apiClient = create({
@@ -262,6 +263,26 @@ export class Api {
             },
             errorMiddewares: [setUnauthorizedMiddleware],
             withAuth: true,
+        });
+    };
+
+    static reset = ({
+        newPassword,
+        oldPassword,
+        code,
+    }: {
+        newPassword: string;
+        oldPassword?: string;
+        code?: string;
+    }) => {
+        return post({
+            endpoint: Endpoint.Reset,
+            body: {
+                oldPassword,
+                newPassword,
+                code,
+            },
+            withAuth: code ? false : true,
         });
     };
 }
