@@ -10,6 +10,7 @@ import {
     setUnauthorizedMiddleware,
 } from './middlewares/setUnauthorized';
 import { Reaction } from '../typings/swipes';
+import { string } from 'yup';
 
 enum Endpoint {
     User = '/User/',
@@ -25,6 +26,8 @@ enum Endpoint {
     SendMessage = '/SendMessage/',
     Connections = '/Connections/',
     Reset = '/Reset/',
+    Update = '/Update/',
+    Remove = '/Remove/',
 }
 
 const apiClient = create({
@@ -283,6 +286,30 @@ export class Api {
                 code,
             },
             withAuth: code ? false : true,
+        });
+    };
+
+    static update = (data: Partial<User['spec']>) => {
+        return post({
+            endpoint: Endpoint.Update,
+            body: {
+                imageSize: 'LARGE',
+                spec: data,
+            },
+            successMiddlewares: [setUserMiddleware],
+            errorMiddewares: [setUnauthorizedMiddleware],
+            withAuth: true,
+        });
+    };
+
+    static remove = ({ text = '' }: { text?: string }) => {
+        return post({
+            endpoint: Endpoint.Remove,
+            body: {
+                text,
+            },
+            successMiddlewares: [setLoggedOutMiddleware],
+            withAuth: true,
         });
     };
 }

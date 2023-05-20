@@ -5,29 +5,29 @@ import { styles } from './styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Modal } from '../../atoms/Modal';
 import { ChangePassword } from './ChangePassword';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/reducers';
+import { Api } from '../../../api';
+import { useNavigation } from '@react-navigation/native';
+import { DeleteProfile } from './DeleteProfile';
 
-type EditProfileProps = {
-    defaultValues: {
-        headline?: string;
-        displayedCompany?: string;
-        bio?: string;
-    };
-};
-
-export const EditProfile = ({ defaultValues }: EditProfileProps) => {
+export const EditProfile = () => {
+    const navigation = useNavigation();
+    const defaultValues = useSelector((state: RootState) => state!.user!.spec);
+    const initialData = Object.assign({}, defaultValues);
     const [inputData, setInputData] = useState<
         Record<string, { value: string; error: string }>
     >({
         headline: {
-            value: defaultValues.headline || '',
+            value: initialData.headline || '',
             error: '',
         },
         bio: {
-            value: defaultValues.bio || '',
+            value: initialData.bio || '',
             error: '',
         },
         company: {
-            value: defaultValues.displayedCompany || '',
+            value: initialData.displayedCompany || '',
             error: '',
         },
     });
@@ -35,13 +35,14 @@ export const EditProfile = ({ defaultValues }: EditProfileProps) => {
     const [saveDisabled, setSaveDisabled] = useState(true);
     const [showChangePasswordModal, setShowChangePasswordModal] =
         useState(false);
+    const [showDeleteProfileModal, setShowDeleteProfileModal] = useState(false);
 
     useEffect(() => {
         const { headline, bio, company } = inputData;
         setSaveDisabled(
-            headline.value === defaultValues.headline &&
-                bio.value === defaultValues.bio &&
-                company.value === defaultValues.displayedCompany
+            headline.value === initialData.headline &&
+                bio.value === initialData.bio &&
+                company.value === initialData.displayedCompany
         );
     }, [
         inputData.headline.value,
@@ -49,7 +50,21 @@ export const EditProfile = ({ defaultValues }: EditProfileProps) => {
         inputData.company.value,
     ]);
 
-    const handleSave = () => {};
+    const handleSave = async () => {
+        setSaveDisabled(true);
+        try {
+            const { headline, company: displayedCompany, bio } = inputData;
+            await Api.update({
+                headline: headline.value,
+                bio: bio.value,
+                displayedCompany: displayedCompany.value,
+            });
+            navigation.navigate('MainProfile');
+        } catch (e) {
+            // TODO: handle error properly
+        }
+        setSaveDisabled(false);
+    };
 
     const { headline, bio, company } = inputData;
     return (
@@ -59,6 +74,11 @@ export const EditProfile = ({ defaultValues }: EditProfileProps) => {
                     <ChangePassword
                         onSave={() => setShowChangePasswordModal(false)}
                     />
+                </Modal>
+            ) : null}
+            {showDeleteProfileModal ? (
+                <Modal onClose={() => setShowDeleteProfileModal(false)}>
+                    <DeleteProfile />
                 </Modal>
             ) : null}
             <LabelledInput
@@ -127,7 +147,13 @@ export const EditProfile = ({ defaultValues }: EditProfileProps) => {
                 ></Button>
             </View>
             <View style={{ flexDirection: 'row' }}>
-                <Button color='red' title='Delete profile'></Button>
+                <Button
+                    color='red'
+                    title='Delete profile'
+                    onPress={() => {
+                        setShowDeleteProfileModal(true);
+                    }}
+                ></Button>
             </View>
         </SafeAreaView>
     );

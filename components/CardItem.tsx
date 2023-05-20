@@ -100,7 +100,6 @@ export const CardItem = ({
                     <TouchableOpacity
                         style={styles.button}
                         onPress={() => {
-                            console.log('!!! id:', id);
                             navigation.navigate('Chat', {
                                 screen: 'MessageList',
                                 params: {
