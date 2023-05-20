@@ -4,7 +4,6 @@ import { Event } from '../event/typings';
 
 export const subscribeSocketMessages = (socket: Socket) => {
     socket.on('NEW_MESSAGE', (data) => {
-        console.log('@@@', data);
         eventEmitter.emit(Event.NEW_MESSAGE, data);
     });
 };

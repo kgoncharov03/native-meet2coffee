@@ -22,10 +22,9 @@ const AppNavigator = () => {
             return;
         }
         const { address: socketUrl } = await Api.getSocket();
-        console.log('!!!', socketUrl + '?token=' + token);
         const connectedSocket = io(socketUrl + '?token=' + token);
         connectedSocket.on('connect', () => console.log('connected'));
-        connectedSocket.on('disconnect', () => console.log('DISCONNECTED'));
+        connectedSocket.on('disconnect', () => console.log('disconnected'));
         setSocket(connectedSocket);
         subscribeSocketMessages(connectedSocket);
     };

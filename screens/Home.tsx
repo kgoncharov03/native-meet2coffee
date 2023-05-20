@@ -55,8 +55,6 @@ const Home = () => {
         });
     }, []);
 
-    console.log('!!! matches.length:', matches.length);
-
     return (
         <ImageBackground
             source={require('../assets/images/bg.png')}
@@ -117,7 +115,9 @@ const Home = () => {
                                     }}
                                     image={item.avatar}
                                     name={item.name}
-                                    description={item.bio}
+                                    bio={item.bio}
+                                    displayedCompany={item.displayedCompany}
+                                    headline={item.headline}
                                 />
                             </Card>
                         ))}
