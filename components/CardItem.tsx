@@ -9,20 +9,28 @@ import styles, {
     STAR_ACTIONS,
     WHITE,
 } from '../assets/styles';
+import { useNavigation } from '@react-navigation/native';
 
-const CardItem = ({
-    description,
+export const CardItem = ({
+    bio,
+    headline,
+    displayedCompany,
     hasActions,
     onLike,
     onDislike,
     hasVariant,
+    hasChatLink,
+    id,
     image,
     isOnline,
     matches,
     name,
+    closeModal,
 }: CardItemT) => {
     // Custom styling
     const fullWidth = Dimensions.get('window').width;
+
+    const navigation = useNavigation();
 
     const imageStyle = [
         {
@@ -35,14 +43,13 @@ const CardItem = ({
 
     const nameStyle = [
         {
-            paddingTop: hasVariant ? 10 : 15,
-            paddingBottom: hasVariant ? 5 : 7,
+            paddingTop: hasVariant ? 5 : 10,
+            paddingBottom: 5,
             color: '#363636',
             fontSize: hasVariant ? 15 : 30,
         },
     ];
 
-    console.log('!!! image:', image);
     return (
         <View style={styles.containerCardItem}>
             {/* IMAGE */}
@@ -62,19 +69,51 @@ const CardItem = ({
             <Text style={nameStyle}>{name}</Text>
 
             {/* DESCRIPTION */}
-            {description && (
-                <Text style={styles.descriptionCardItem}>{description}</Text>
+            {(bio || headline || displayedCompany) && (
+                <View style={styles.aboutSection}>
+                    <View style={styles.aboutBlock}>
+                        <Text style={styles.blockIcon}>💼</Text>
+                        <Text style={styles.blockText}>{headline}</Text>
+                    </View>
+                    <View style={styles.aboutBlock}>
+                        <Text style={styles.blockIcon}>👔</Text>
+                        <Text style={styles.blockText}>{displayedCompany}</Text>
+                    </View>
+                    <View style={{ ...styles.aboutBlock, marginBottom: 0 }}>
+                        <Text style={styles.blockIcon}>📌</Text>
+                        <Text style={styles.blockText}>{bio}</Text>
+                    </View>
+                </View>
             )}
 
             {/* STATUS */}
-            {!description && (
+            {/* {!description && (
                 <View style={styles.status}>
                     <View style={isOnline ? styles.online : styles.offline} />
                     <Text style={styles.statusText}>
                         {isOnline ? 'Online' : 'Offline'}
                     </Text>
                 </View>
-            )}
+            )} */}
+            {hasChatLink ? (
+                <View style={styles.actionsCardItem}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => {
+                            console.log('!!! id:', id);
+                            navigation.navigate('Chat', {
+                                screen: 'MessageList',
+                                params: {
+                                    id,
+                                },
+                            });
+                            closeModal && closeModal();
+                        }}
+                    >
+                        <Icon name='chatbox' color={LIKE_ACTIONS} size={25} />
+                    </TouchableOpacity>
+                </View>
+            ) : null}
 
             {/* ACTIONS */}
             {hasActions && (
@@ -99,5 +138,3 @@ const CardItem = ({
         </View>
     );
 };
-
-export default CardItem;

@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     ImageBackground,
     FlatList,
+    Modal,
 } from 'react-native';
 import { CardItem, Icon } from '../components';
 import DEMO from '../assets/data/demo';
@@ -18,6 +19,8 @@ const Matches = () => {
         loading: boolean;
         connections: any[];
     }>({ loading: true, connections: [] });
+
+    const [modal, setModal] = useState(null);
 
     const fetchConnections = async () => {
         try {
@@ -39,7 +42,6 @@ const Matches = () => {
         fetchConnections();
     }, []);
 
-    console.log(state.connections);
     return (
         <ImageBackground
             // source={require('../assets/images/bg.png')}
@@ -57,12 +59,60 @@ const Matches = () => {
                     </TouchableOpacity>
                 </View>
 
+                {modal ? (
+                    <Modal
+                        onRequestClose={() => {
+                            setModal(null);
+                        }}
+                        animationType='none'
+                        transparent
+                    >
+                        <TouchableOpacity
+                            style={{
+                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                width: '100%',
+                                height: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                            }}
+                            activeOpacity={1}
+                            onPress={() => setModal(null)}
+                        >
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                style={{
+                                    width: '100%',
+                                    position: 'relative',
+                                    marginTop: '-30%',
+                                    paddingBottom: 10,
+                                }}
+                            >
+                                <CardItem
+                                    image={modal.avatar}
+                                    name={modal.name}
+                                    headline={modal.headline}
+                                    bio={modal.bio}
+                                    displayedCompany={modal.displayedCompany}
+                                    id={modal.id}
+                                    hasChatLink
+                                    closeModal={() => setModal(null)}
+                                    // isOnline={item.isOnline}
+                                />
+                            </TouchableOpacity>
+                        </TouchableOpacity>
+                    </Modal>
+                ) : null}
                 <FlatList
                     numColumns={2}
                     data={state.connections}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                setModal(item);
+                            }}
+                        >
                             <CardItem
                                 image={item.avatar}
                                 name={item.name}

@@ -1,5 +1,7 @@
 export type CardItemT = {
-    description?: string;
+    bio?: string;
+    headline?: string;
+    displayedCompany?: string;
     hasActions?: boolean;
     hasVariant?: boolean;
     image: any;

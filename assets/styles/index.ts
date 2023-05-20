@@ -30,6 +30,7 @@ export default StyleSheet.create({
         shadowRadius: 10,
         shadowColor: BLACK,
         shadowOffset: { height: 0, width: 0 },
+        paddingBottom: 5,
     },
     matchesCardItem: {
         marginTop: -35,
@@ -101,6 +102,22 @@ export default StyleSheet.create({
         shadowColor: DARK_GRAY,
         shadowOffset: { height: 10, width: 0 },
     },
+    aboutSection: {
+        width: '100%',
+        paddingHorizontal: 15,
+    },
+    aboutText: {
+        fontSize: 16,
+    },
+    aboutBlock: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginBottom: 4,
+    },
+    blockIcon: {
+        marginRight: 4,
+    },
+    blockText: {},
 
     // COMPONENT - CITY
     city: {

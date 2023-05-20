@@ -83,6 +83,14 @@ export const MessageList = ({
         initMessages();
     }, []);
 
+    useEffect(() => {
+        setMessagesData((prevData) => ({
+            ...prevData,
+            loading: true,
+        }));
+        initMessages();
+    }, [route.params.id]);
+
     const onSend = useCallback((messages: any[] = []) => {
         setMessagesData((data) => ({
             ...data,
